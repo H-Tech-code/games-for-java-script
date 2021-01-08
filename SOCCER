@@ -1,0 +1,105 @@
+var gameState = "serve";
+
+var Goldmaster = createSprite(200, 200, 10, 10);
+var Goldbar = createSprite(100, 120, 35, 15);
+
+var wall1 = createSprite(24, 200, 10, 400);
+var wall2 = createSprite(374, 200, 10, 400);
+var wall3 = createSprite(200, 50, 400, 10);
+var wall4 = createSprite(200, 360, 400, 10);
+
+var gold = 0;
+var time = 0;
+
+wall1.shapeColor = "gold";
+wall2.shapeColor = "gold";
+wall3.shapeColor = "gold";
+wall4.shapeColor = "gold";
+
+Goldbar.shapeColor = "gold";
+
+
+Goldmaster.setAnimation("alienYellow_walk_1");
+
+
+  Goldmaster.velocityY = 0;
+  Goldmaster.velocityX = 0;
+
+function draw() {
+  createEdgeSprites();
+background("black");
+
+  
+ if(keyDown("space")){
+  gameState = "play";
+ }
+ if(gameState === "play"){
+    if(keyDown(DOWN_ARROW)){
+       Goldmaster.y = Goldmaster.y+7;
+   }
+   
+    if(keyDown(UP_ARROW)){
+       Goldmaster.y = Goldmaster.y-7;
+   }
+      if(keyDown(LEFT_ARROW)){
+       Goldmaster.x = Goldmaster.x-7;
+   }
+      if(keyDown(RIGHT_ARROW)){
+       Goldmaster.x = Goldmaster.x+7;
+   }
+   Goldmaster.bounceOff(wall1);
+   Goldmaster.bounceOff(wall2);
+    Goldmaster.bounceOff(wall3);
+     Goldmaster.bounceOff(wall4);
+     
+     if(Goldmaster.isTouching(Goldbar)){
+    Goldbar.x = randomNumber(60, 300);
+    Goldbar.y = randomNumber(60, 300);
+  
+    playSound("sound://category_collect/vibrant_game_coin_1.mp3");
+    
+    gold = gold+1;
+  }
+  time = World.seconds;
+ }
+ 
+ if(gameState === "serve"){
+   textSize(20);
+   fill("gold");
+   text("press 'space' to start.", 110,265);
+ }
+ 
+  textSize(20);
+  fill("gold");
+  text("time: "+time, 290, 75);
+  
+  
+  textSize("30");
+  fill("gold");
+  text("get over 100 gold to win!", 38, 30);
+  
+  
+
+
+  
+  
+  textSize("22");
+  text(gold, 180, 345);
+  text("gold:", 130, 345);
+  
+  
+  drawSprites();
+  
+  if(time > 60){
+    background("red");
+    text("GAME OVER!", 170, 200);
+  }
+  
+ if(gold > 100){
+   background("green");
+   text("VICTORY", 170,200);
+ }
+}
+
+ 
+
